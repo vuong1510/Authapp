@@ -45,8 +45,6 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(100), nullable=False) # should be hashed later
     firstName = db.Column(db.String(100), nullable=True)
     lastName = db.Column(db.String(100), nullable=True)
-    role = db.Column(db.String(50), nullable=False, default='basicuser')
-    status = db.Column(db.String(50), nullable=False, default='active')
 
     @property
     def is_authenticated(self):
@@ -140,10 +138,6 @@ def getAToken():
 @app.route("/edit-profile", methods=["GET", "POST"])
 @login_required
 def edit_profile():
-    if not current_user.is_admin():
-        flash("You must be an admin to access this page.")
-        return(redirect(url_for('home')))
-    
     form = UpdateProfileForm()
 
     if form.validate_on_submit():
