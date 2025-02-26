@@ -1,1 +1,3 @@
-vars.txt
+venv/
+.flask_session/
+.env
