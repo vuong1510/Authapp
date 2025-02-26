@@ -49,6 +49,17 @@
         </div>
     </nav>
 
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="alert alert-warning" style="display: flex; align-items: flex-start; padding: 5px 15px; margin-bottom: 10px;">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endwith %}
+
     <!-- Main content -->
     <div class="container mt-5 flex-grow-1"> <!-- Adds a margin-top -->
         <h1 class="text-left">{% block page_header %}Authentication App{% endblock %}</h1>

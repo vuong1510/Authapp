@@ -1,5 +1,5 @@
 import os, secrets
-from flask import Flask, request, render_template, redirect, url_for, session
+from flask import Flask, request, render_template, redirect, url_for, session, flash
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
@@ -45,10 +45,18 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(100), nullable=False) # should be hashed later
     firstName = db.Column(db.String(100), nullable=True)
     lastName = db.Column(db.String(100), nullable=True)
+    role = db.Column(db.String(50), nullable=False, default='basicuser')
+    status = db.Column(db.String(50), nullable=False, default='active')
 
     @property
     def is_authenticated(self):
         return True
+    
+    def is_active(self):
+        return self.status == 'active'
+    
+    def is_admin(self):
+        return self.role == 'admin'
 
 # creates the database tables
 with app.app_context():
@@ -132,6 +140,10 @@ def getAToken():
 @app.route("/edit-profile", methods=["GET", "POST"])
 @login_required
 def edit_profile():
+    if not current_user.is_admin():
+        flash("You must be an admin to access this page.")
+        return(redirect(url_for('home')))
+    
     form = UpdateProfileForm()
 
     if form.validate_on_submit():
