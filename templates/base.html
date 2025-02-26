@@ -18,9 +18,17 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/home">Home</a>
                     </li>
+                    {% if current_user.is_authenticated %}
                     <li class="nav-item">
+                        <!-- Show logout when the user is authenticated-->
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <!-- Show login when the user is not authenticated-->
                         <a class="nav-link" href="/login">Login</a>
                     </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="/login-microsoft">Azure Login</a>
                     </li>
@@ -29,7 +37,6 @@
                     </li>
                 </ul>
             </div>
-
         </div>
     </nav>
 

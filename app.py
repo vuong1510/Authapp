@@ -1,5 +1,5 @@
 import os, secrets
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from authlib.integrations.flask_client import OAuth
@@ -12,7 +12,7 @@ app = Flask(__name__)
 # connects the app to the sql database and secret key
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:D0Ge59PDT@localhost/users'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = os.urandom(24)
+app.config['SECRET_KEY'] = 'verysecretkey123'
 
 db = SQLAlchemy(app)
 
@@ -72,20 +72,43 @@ def login():
         if user and user.password == password:
             login_user(user)
             return(redirect(url_for('home')))
+        
         return("Invalid credentials.")
     
     return(render_template('login.html', form=form))
+
 
 @app.route('/login-microsoft')
 def login_microsoft():
     redirect_uri = url_for('getAToken', _external=True)
     return(microsoft.authorize_redirect(redirect_uri))
 
+
 @app.route('/getAToken')
 def getAToken():
+    # retrieve the access token from Microsoft OAuth
     token = microsoft.authorize_access_token()
+
+    # store the token in the session for future use
+    session['access_token'] = token
+
+    # get user information from the Microsoft Graph API, currently we're doing nothing with it
     user_info = microsoft.get('https://graph.microsoft.com/v1.0/me').json()
-    return(f'Hello, {user_info['displayName']}')
+
+    user = User.query.filter_by(username=user_info['userPrincipalName']).first()
+
+    # if the user does not exist, create a new one
+    if user is None:
+        user = User(username=user_info['userPrincipalName'], password='')
+        db.session.add(user)
+        db.session.commit()
+    
+    # Log the user in
+    login_user(user)
+
+    #Redirect to the home page
+    return(redirect(url_for('home')))
+
 
 # logout route, logs out the user, obviously
 @app.route('/logout')
