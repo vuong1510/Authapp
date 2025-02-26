@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Login Page{% endblock %}
+{% block page_header %}Login{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <form method="POST" class="mt-4">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            <label for="username">Username</label>
+            {{ form.username(class="form-control", id="username") }}
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            {{ form.password(class="form-control", id="password") }}
+        </div>
+
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary mt-3">Login</button>
+        </div>
+
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                {% for field, errors in form.errors.items() %}
+                    <p><strong>{{ field.label }}:</strong> {% for error in errors %} {{ error }} {% endfor %}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </form>
+</div>
+{% endblock %}
