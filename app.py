@@ -26,7 +26,7 @@ microsoft = oauth.register(
     name = 'microsoft',
     client_id = os.getenv('AZURE_CLIENT_ID'),
     client_secret = os.getenv('AZURE_CLIENT_SECRET'),
-    server_metadata_url = 'https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration',
+    server_metadata_url = f'https://login.microsoftonline.com/{os.getenv("AZURE_TENANT_ID")}/v2.0/.well-known/openid-configuration',
     client_kwargs = {'scope': 'User.Read openid profile offline_access'}
 )
 
