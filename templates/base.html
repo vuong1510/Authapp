@@ -18,20 +18,29 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/home">Home</a>
                     </li>
+
                     {% if current_user.is_authenticated %}
                     <li class="nav-item">
                         <!-- Show logout when the user is authenticated-->
                         <a class="nav-link" href="/logout">Logout</a>
                     </li>
+                    <li class="nav-item">
+                        <!-- Show account dashboard when the user is authenticated-->
+                        <a class="nav-link" href="/edit-profile">Manage Account</a>
+                    </li>
+
                     {% else %}
+
                     <li class="nav-item">
                         <!-- Show login when the user is not authenticated-->
                         <a class="nav-link" href="/login">Login</a>
                     </li>
-                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="/login-microsoft">Azure Login</a>
                     </li>
+
+                    {% endif %}
+
                     <li class="nav-item">
                         <a class="nav-link" href="/about">About</a>
                     </li>
@@ -48,7 +57,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white text-center py-4 mt-auto">
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
         <p>&copy; 2025 Authentication App. All Rights Reserved.</p>
         <p><a href="/license" class="text-white">License</a> | <a href="https://github.com/ParkerTraxler/Authapp" class="text-white">GitHub</a></p>
     </footer>

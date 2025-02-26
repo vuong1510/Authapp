@@ -2,5 +2,17 @@
 {% block title %}Home Page{% endblock %}
 {% block page_header %}Welcome to the Authentication App.{% endblock %}
 {% block content %}
-    <p class="mt-4">This application is designed to integrate with Azure to allow users to create, modify, and delete accounts.</p>
+
+    {% if current_user.is_authenticated %}
+        <p class="mt-4"> Greetings {{ current_user.firstName }}.</p>
+        <p> If you would like to change your account information, click "Manage Account" in the navigation bar above.</p>
+
+    {% else %}
+        <p class="mt-4"> Greetings.</p>
+        <p> You are currently not logged in. If you would like to log in, you can login in normally via "Login" above, or login via Azure.</p>
+
+    {% endif %}
+
+    <p>This application is designed to integrate with Azure to allow users to create, modify, and delete accounts.</p>
+    
 {% endblock %}
